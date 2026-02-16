@@ -1,32 +1,38 @@
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useAuthStore } from "./store/authStore";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import LoginPage from "./pages/LoginPage";
 import OverviewPage from "./pages/OverviewPage";
-import WithdrawalsPage from "./pages/WithdrawalsPage";
 import AdminsPage from "./pages/AdminsPage";
-import NotificationsPage from "./pages/NotificationsPage";
-import QRCodesPage from "./pages/QRCodesPage";
+import DepositWalletsPage from "./pages/DepositWalletsPage";
+import PendingDepositsPage from "./pages/PendingDepositsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<OverviewPage />} />
-          <Route path="/withdrawals" element={<WithdrawalsPage />} />
-          <Route path="/admins" element={<AdminsPage />} />
-          <Route path="/notifications" element={<NotificationsPage />} />
-          <Route path="/qr-codes" element={<QRCodesPage />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const App = () => {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={isAuthenticated ? <Navigate to="/" replace /> : <LoginPage />} />
+            <Route path="/" element={<ProtectedRoute><OverviewPage /></ProtectedRoute>} />
+            <Route path="/admins" element={<ProtectedRoute><AdminsPage /></ProtectedRoute>} />
+            <Route path="/deposit-wallets" element={<ProtectedRoute><DepositWalletsPage /></ProtectedRoute>} />
+            <Route path="/pending-deposits" element={<ProtectedRoute><PendingDepositsPage /></ProtectedRoute>} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
