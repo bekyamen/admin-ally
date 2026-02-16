@@ -1,4 +1,4 @@
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL;
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 if (!API_BASE) {
   throw new Error('API base URL is not defined in environment variables');
