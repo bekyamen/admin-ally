@@ -1,27 +1,30 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  ArrowLeftRight,
   Users,
-  Bell,
-  QrCode,
+  Wallet,
+  ArrowDownCircle,
   LayoutDashboard,
   Shield,
+  LogOut,
 } from 'lucide-react';
-import { useDashboardStore } from '@/store/dashboardStore';
+import { useAuthStore } from '@/store/authStore';
 
 const navItems = [
   { to: '/', icon: LayoutDashboard, label: 'Overview' },
-  { to: '/withdrawals', icon: ArrowLeftRight, label: 'Withdrawals' },
   { to: '/admins', icon: Users, label: 'Admins' },
-  { to: '/notifications', icon: Bell, label: 'Notifications' },
-  { to: '/qr-codes', icon: QrCode, label: 'QR Codes' },
+  { to: '/deposit-wallets', icon: Wallet, label: 'Deposit Wallets' },
+  { to: '/pending-deposits', icon: ArrowDownCircle, label: 'Pending Deposits' },
 ];
 
 export function DashboardSidebar() {
   const location = useLocation();
-  const unreadCount = useDashboardStore(
-    (s) => s.notifications.filter((n) => !n.read).length
-  );
+  const navigate = useNavigate();
+  const { user, logout } = useAuthStore();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r border-border bg-sidebar">
@@ -50,25 +53,25 @@ export function DashboardSidebar() {
             >
               <Icon className="h-4 w-4" />
               {label}
-              {label === 'Notifications' && unreadCount > 0 && (
-                <span className="ml-auto flex h-5 min-w-[20px] items-center justify-center rounded-full bg-destructive px-1.5 text-xs font-bold text-destructive-foreground">
-                  {unreadCount}
-                </span>
-              )}
             </Link>
           );
         })}
       </nav>
 
       <div className="border-t border-border px-4 py-4">
-        <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-xs font-bold text-primary">
-            SA
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/20 text-xs font-bold text-primary">
+              {user?.firstName?.[0] || 'S'}{user?.lastName?.[0] || 'A'}
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-foreground">{user?.firstName || 'Super'} {user?.lastName || 'Admin'}</p>
+              <p className="text-xs text-muted-foreground">{user?.email || 'admin@tradepro.io'}</p>
+            </div>
           </div>
-          <div>
-            <p className="text-xs font-semibold text-foreground">Super Admin</p>
-            <p className="text-xs text-muted-foreground">admin@tradepro.io</p>
-          </div>
+          <button onClick={handleLogout} className="rounded-lg p-1.5 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive" title="Logout">
+            <LogOut className="h-4 w-4" />
+          </button>
         </div>
       </div>
     </aside>
