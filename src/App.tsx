@@ -9,6 +9,7 @@ import OverviewPage from "./pages/OverviewPage";
 import AdminsPage from "./pages/AdminsPage";
 import DepositWalletsPage from "./pages/DepositWalletsPage";
 import PendingDepositsPage from "./pages/PendingDepositsPage";
+import DepositHistoryPage from "./pages/DepositHistoryPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => {
             <Route path="/admins" element={<ProtectedRoute><AdminsPage /></ProtectedRoute>} />
             <Route path="/deposit-wallets" element={<ProtectedRoute><DepositWalletsPage /></ProtectedRoute>} />
             <Route path="/pending-deposits" element={<ProtectedRoute><PendingDepositsPage /></ProtectedRoute>} />
+            <Route path="/deposit-history" element={<ProtectedRoute><DepositHistoryPage /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

@@ -1,5 +1,5 @@
 import { DashboardLayout } from '@/components/DashboardLayout';
-import { Users, Wallet, ArrowDownCircle } from 'lucide-react';
+import { Users, Wallet, ArrowDownCircle, History } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 
@@ -10,6 +10,7 @@ export default function OverviewPage() {
     { label: 'Manage Admins', icon: Users, to: '/admins', desc: 'Create, edit, delete admin accounts' },
     { label: 'Deposit Wallets', icon: Wallet, to: '/deposit-wallets', desc: 'Manage wallet addresses and QR codes' },
     { label: 'Pending Deposits', icon: ArrowDownCircle, to: '/pending-deposits', desc: 'Approve or reject deposit requests' },
+    { label: 'Deposit History', icon: History, to: '/deposit-history', desc: 'View all approved and rejected deposits' },
   ];
 
   return (
@@ -19,7 +20,7 @@ export default function OverviewPage() {
         <p className="text-sm text-muted-foreground">Welcome back, {user?.firstName || 'Super Admin'}</p>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {quickLinks.map((link) => (
           <Link
             key={link.to}
