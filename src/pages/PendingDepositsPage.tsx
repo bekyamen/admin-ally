@@ -1,31 +1,18 @@
 import { useEffect, useState } from 'react';
 import { DashboardLayout } from '@/components/DashboardLayout';
-import { getPendingDepositsAPI, approveDepositAPI, rejectDepositAPI } from '@/lib/api';
-import { Check, X, Loader2, RefreshCw } from 'lucide-react';
+import { getPendingDepositsAPI, approveDepositAPI, rejectDepositAPI, type Deposit } from '@/lib/api';
+import { Check, X, Loader2, RefreshCw, Eye, MessageSquare } from 'lucide-react';
 import { toast } from 'sonner';
 
-interface Deposit {
-  id: string;
-  userId: string;
-  walletId: string;
-  coin: string;
-  amount: number;
-  transactionHash: string;
-  status: string;
-  user: {
-    id: string;
-    email: string;
-    firstName: string;
-    lastName: string;
-    balance: number;
-    role: string;
-  };
-}
+const API_BASE = import.meta.env.VITE_API_BASE_URL;
 
 export default function PendingDepositsPage() {
   const [deposits, setDeposits] = useState<Deposit[]>([]);
   const [loading, setLoading] = useState(true);
   const [actionId, setActionId] = useState<string | null>(null);
+  const [rejectModal, setRejectModal] = useState<string | null>(null);
+  const [reviewNote, setReviewNote] = useState('');
+  const [proofModal, setProofModal] = useState<string | null>(null);
 
   const fetchDeposits = async () => {
     setLoading(true);
@@ -57,14 +44,23 @@ export default function PendingDepositsPage() {
   const handleReject = async (id: string) => {
     setActionId(id);
     try {
-      await rejectDepositAPI(id);
+      await rejectDepositAPI(id, reviewNote || undefined);
       toast.success('Deposit rejected');
       setDeposits((prev) => prev.filter((d) => d.id !== id));
+      setRejectModal(null);
+      setReviewNote('');
     } catch (err: any) {
       toast.error(err.message || 'Failed to reject');
     } finally {
       setActionId(null);
     }
+  };
+
+  const getImageUrl = (path?: string) => {
+    if (!path) return '';
+    if (path.startsWith('http')) return path;
+    const base = API_BASE.replace('/api', '');
+    return `${base}/${path}`;
   };
 
   return (
@@ -74,10 +70,7 @@ export default function PendingDepositsPage() {
           <h1 className="text-2xl font-bold text-foreground">Pending Deposits</h1>
           <p className="text-sm text-muted-foreground">Approve or reject user deposit requests</p>
         </div>
-        <button
-          onClick={fetchDeposits}
-          className="inline-flex items-center gap-2 rounded-lg bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground hover:bg-secondary/80"
-        >
+        <button onClick={fetchDeposits} className="inline-flex items-center gap-2 rounded-lg bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground hover:bg-secondary/80">
           <RefreshCw className="h-4 w-4" /> Refresh
         </button>
       </div>
@@ -100,6 +93,7 @@ export default function PendingDepositsPage() {
                   <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Coin</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Amount</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tx Hash</th>
+                  <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Proof</th>
                   <th className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider text-muted-foreground">Balance</th>
                   <th className="px-4 py-3 text-right text-xs font-semibold uppercase tracking-wider text-muted-foreground">Actions</th>
                 </tr>
@@ -112,29 +106,26 @@ export default function PendingDepositsPage() {
                       <p className="font-mono text-xs text-muted-foreground">{d.user.email}</p>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">
-                        {d.coin}
-                      </span>
+                      <span className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">{d.coin}</span>
                     </td>
                     <td className="px-4 py-3 font-semibold text-foreground">${d.amount.toLocaleString()}</td>
-                    <td className="px-4 py-3 font-mono text-xs text-muted-foreground max-w-[200px] truncate" title={d.transactionHash}>
-                      {d.transactionHash}
+                    <td className="px-4 py-3 max-w-[160px] truncate font-mono text-xs text-muted-foreground" title={d.transactionHash}>{d.transactionHash}</td>
+                    <td className="px-4 py-3">
+                      {d.proofImage ? (
+                        <button onClick={() => setProofModal(d.proofImage!)} className="inline-flex items-center gap-1 rounded-lg bg-secondary px-2 py-1 text-xs text-secondary-foreground hover:bg-secondary/80">
+                          <Eye className="h-3 w-3" /> View
+                        </button>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">—</span>
+                      )}
                     </td>
                     <td className="px-4 py-3 text-muted-foreground">${d.user.balance.toLocaleString()}</td>
                     <td className="px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => handleApprove(d.id)}
-                          disabled={actionId === d.id}
-                          className="inline-flex items-center gap-1 rounded-lg bg-success/10 px-3 py-1.5 text-xs font-semibold text-success transition-colors hover:bg-success/20 disabled:opacity-50"
-                        >
+                        <button onClick={() => handleApprove(d.id)} disabled={actionId === d.id} className="inline-flex items-center gap-1 rounded-lg bg-success/10 px-3 py-1.5 text-xs font-semibold text-success transition-colors hover:bg-success/20 disabled:opacity-50">
                           <Check className="h-3 w-3" /> Approve
                         </button>
-                        <button
-                          onClick={() => handleReject(d.id)}
-                          disabled={actionId === d.id}
-                          className="inline-flex items-center gap-1 rounded-lg bg-destructive/10 px-3 py-1.5 text-xs font-semibold text-destructive transition-colors hover:bg-destructive/20 disabled:opacity-50"
-                        >
+                        <button onClick={() => setRejectModal(d.id)} disabled={actionId === d.id} className="inline-flex items-center gap-1 rounded-lg bg-destructive/10 px-3 py-1.5 text-xs font-semibold text-destructive transition-colors hover:bg-destructive/20 disabled:opacity-50">
                           <X className="h-3 w-3" /> Reject
                         </button>
                       </div>
@@ -143,6 +134,37 @@ export default function PendingDepositsPage() {
                 ))}
               </tbody>
             </table>
+          </div>
+        </div>
+      )}
+
+      {/* Reject Modal */}
+      {rejectModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-xl border border-border bg-card p-6 shadow-2xl">
+            <div className="mb-4 flex items-center justify-between">
+              <h2 className="text-lg font-bold text-foreground">Reject Deposit</h2>
+              <button onClick={() => { setRejectModal(null); setReviewNote(''); }} className="text-muted-foreground hover:text-foreground"><X className="h-5 w-5" /></button>
+            </div>
+            <div className="space-y-4">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-muted-foreground">Review Note (optional)</label>
+                <textarea value={reviewNote} onChange={(e) => setReviewNote(e.target.value)} rows={3} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary" placeholder="Reason for rejection..." />
+              </div>
+              <button onClick={() => handleReject(rejectModal)} disabled={actionId === rejectModal} className="flex w-full items-center justify-center gap-2 rounded-lg bg-destructive py-2.5 text-sm font-semibold text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50">
+                {actionId === rejectModal ? <Loader2 className="h-4 w-4 animate-spin" /> : <X className="h-4 w-4" />}
+                Confirm Reject
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Proof Image Modal */}
+      {proofModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm" onClick={() => setProofModal(null)}>
+          <div className="max-h-[80vh] max-w-lg overflow-hidden rounded-xl border border-border bg-card p-2 shadow-2xl" onClick={(e) => e.stopPropagation()}>
+            <img src={getImageUrl(proofModal)} alt="Proof" className="max-h-[75vh] w-full rounded-lg object-contain" />
           </div>
         </div>
       )}
