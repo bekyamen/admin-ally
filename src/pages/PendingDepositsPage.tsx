@@ -161,13 +161,38 @@ export default function PendingDepositsPage() {
       )}
 
       {/* Proof Image Modal */}
-      {proofModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm" onClick={() => setProofModal(null)}>
-          <div className="max-h-[80vh] max-w-lg overflow-hidden rounded-xl border border-border bg-card p-2 shadow-2xl" onClick={(e) => e.stopPropagation()}>
-            <img src={getImageUrl(proofModal)} alt="Proof" className="max-h-[75vh] w-full rounded-lg object-contain" />
-          </div>
-        </div>
-      )}
+      {/* Proof Image Modal */}
+{proofModal && (
+  <div
+    className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+    onClick={() => setProofModal(null)}
+  >
+    <div
+      className="relative max-h-full w-full max-w-3xl rounded-xl overflow-hidden shadow-2xl bg-card"
+      onClick={(e) => e.stopPropagation()}
+    >
+      {/* Close button */}
+      <button
+        onClick={() => setProofModal(null)}
+        className="absolute top-3 right-3 z-50 rounded-full bg-black/50 p-2 text-white hover:bg-black/70"
+      >
+        <X className="h-5 w-5" />
+      </button>
+
+      {/* Image */}
+      <img
+        src={getImageUrl(proofModal)}
+        alt="Deposit Proof"
+        className="h-full w-full object-contain rounded-lg bg-black"
+      />
+
+      {/* Optional: Zoom feature */}
+      <p className="absolute bottom-3 left-1/2 -translate-x-1/2 text-sm text-white/80">
+        Click outside to close
+      </p>
+    </div>
+  </div>
+)}
     </DashboardLayout>
   );
 }
