@@ -21,12 +21,12 @@ export default function DepositWalletsPage() {
   const fetchWallets = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/admin/deposit/deposit-wallet`, {
+      const res = await fetch(`${API_BASE}/admin/deposit/wallets`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('auth_token')}` },
       });
       const data = await res.json();
-      if (data.success || data.data) {
-        setWallets(Array.isArray(data.data) ? data.data : data.data ? [data.data] : []);
+      if (data.success && data.data) {
+        setWallets(data.data);
       }
     } catch {
       // Wallet list endpoint might not exist yet; keep empty
