@@ -160,7 +160,7 @@ export default function DepositWalletsPage() {
                 <div>
                   <label className="mb-1 block text-xs font-medium text-muted-foreground">Coin</label>
                   <select value={form.coin} onChange={(e) => setForm({ ...form, coin: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary">
-                    <option>BTC</option><option>ETH</option><option>USDT</option><option>BNB</option><option>SOL</option>
+                    <option>BTC</option><option>ETH</option><option>USDT</option>
                   </select>
                 </div>
               )}
