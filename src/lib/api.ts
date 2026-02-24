@@ -225,3 +225,56 @@ export async function getDepositHistoryAPI() {
 export async function getDepositByIdAPI(id: string) {
   return request<{ success: boolean; data: Deposit }>(`/admin/deposit/get/${id}`);
 }
+
+// ─── Withdrawals ───
+export interface WithdrawUser {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface Withdrawal {
+  id: string;
+  userId: string;
+  coin: string;
+  network: string;
+  address: string;
+  amount: number;
+  fee: number;
+  usdValue: number;
+  status: string;
+  reviewedBy?: string | null;
+  reviewNote?: string | null;
+  createdAt: string;
+  updatedAt: string;
+  user: WithdrawUser;
+}
+
+export interface WithdrawListResponse {
+  data: Withdrawal[];
+  pagination: { total: number; page: number; pages: number };
+}
+
+export async function getAllWithdrawalsAPI(page = 1, limit = 10) {
+  return request<WithdrawListResponse>(`/withdraw/admin/all?page=${page}&limit=${limit}`);
+}
+
+export async function getPendingWithdrawalsAPI() {
+  return request<{ success: boolean; data: Withdrawal[] }>('/withdraw/admin/pending');
+}
+
+export async function approveWithdrawalAPI(id: string) {
+  return request<{ message: string }>(`/withdraw/approve/${id}`, { method: 'PUT' });
+}
+
+export async function rejectWithdrawalAPI(id: string, reviewNote?: string) {
+  return request<{ message: string }>(`/withdraw/reject/${id}`, {
+    method: 'PUT',
+    body: JSON.stringify(reviewNote ? { reviewNote } : {}),
+  });
+}
+
+export async function getWithdrawHistoryAPI() {
+  return request<{ success: boolean; count: number; data: Withdrawal[] }>('/withdraw/admin/history');
+}

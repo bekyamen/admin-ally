@@ -1,5 +1,5 @@
 import { DashboardLayout } from '@/components/DashboardLayout';
-import { Users, Wallet, ArrowDownCircle, History } from 'lucide-react';
+import { Users, Wallet, ArrowDownCircle, ArrowUpCircle, History } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 
@@ -11,6 +11,8 @@ export default function OverviewPage() {
     { label: 'Deposit Wallets', icon: Wallet, to: '/deposit-wallets', desc: 'Manage wallet addresses and QR codes' },
     { label: 'Pending Deposits', icon: ArrowDownCircle, to: '/pending-deposits', desc: 'Approve or reject deposit requests' },
     { label: 'Deposit History', icon: History, to: '/deposit-history', desc: 'View all approved and rejected deposits' },
+    { label: 'Pending Withdrawals', icon: ArrowUpCircle, to: '/pending-withdrawals', desc: 'Approve or reject withdrawal requests' },
+    { label: 'Withdraw History', icon: History, to: '/withdraw-history', desc: 'View all processed withdrawals' },
   ];
 
   return (
