@@ -143,6 +143,7 @@ export async function deleteAdminAPI(id: string) {
 export interface DepositWallet {
   id: string;
   coin: string;
+  network: string;
   address: string;
   qrImage: string;
   isActive: boolean;
@@ -150,9 +151,10 @@ export interface DepositWallet {
   updatedAt: string;
 }
 
-export async function createDepositWalletAPI(coin: string, address: string, qrImage: File) {
+export async function createDepositWalletAPI(coin: string, network: string, address: string, qrImage: File) {
   const formData = new FormData();
   formData.append('coin', coin);
+  formData.append('network', network);
   formData.append('address', address);
   formData.append('qrImage', qrImage);
   return request<{ success: boolean; message: string; data: DepositWallet }>('/admin/deposit/deposit-wallet', {
@@ -161,18 +163,18 @@ export async function createDepositWalletAPI(coin: string, address: string, qrIm
   });
 }
 
-export async function editDepositWalletAPI(coin: string, address?: string, qrImage?: File) {
+export async function editDepositWalletAPI(coin: string, network: string, address?: string, qrImage?: File) {
   const formData = new FormData();
   if (address) formData.append('address', address);
   if (qrImage) formData.append('qrImage', qrImage);
-  return request<{ success: boolean; message: string; data: DepositWallet }>(`/admin/deposit/deposit-wallet/${coin}`, {
+  return request<{ success: boolean; message: string; data: DepositWallet }>(`/admin/deposit/deposit-wallet/${coin}/${network}`, {
     method: 'PUT',
     body: formData,
   });
 }
 
-export async function deleteDepositWalletAPI(coin: string) {
-  return request<{ success: boolean; message: string }>(`/admin/deposit/deposit-wallet/${coin}`, {
+export async function deleteDepositWalletAPI(coin: string, network: string) {
+  return request<{ success: boolean; message: string }>(`/admin/deposit/deposit-wallet/${coin}/${network}`, {
     method: 'DELETE',
   });
 }
