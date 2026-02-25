@@ -186,14 +186,21 @@ export default function DepositWalletsPage() {
                       <option>BTC</option><option>ETH</option><option>USDT</option>
                     </select>
                   </div>
-                  <div>
-                    <label className="mb-1 block text-xs font-medium text-muted-foreground">Network</label>
-                    <select value={form.network} onChange={(e) => setForm({ ...form, network: e.target.value })} className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary">
-                      {(NETWORK_OPTIONS[form.coin] || ['Default']).map((n) => (
-                        <option key={n} value={n}>{n}</option>
-                      ))}
-                    </select>
-                  </div>
+                 <div>
+  <label className="mb-1 block text-xs font-medium text-muted-foreground">
+    Network
+  </label>
+
+  <select
+    value={form.network}
+    onChange={(e) => setForm({ ...form, network: e.target.value })}
+    className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+  >
+    <option value="BITCOIN">Bitcoin</option>
+    <option value="TRC20">TRC20</option>
+    <option value="ERC20">ERC20</option>
+  </select>
+</div>
                 </>
               )}
               <div>
