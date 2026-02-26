@@ -1,5 +1,5 @@
 import { DashboardLayout } from '@/components/DashboardLayout';
-import { Users, Wallet, ArrowDownCircle, ArrowUpCircle, History } from 'lucide-react';
+import { Users, Wallet, ArrowDownCircle, ArrowUpCircle, History, FileCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 
@@ -13,6 +13,7 @@ export default function OverviewPage() {
     { label: 'Deposit History', icon: History, to: '/deposit-history', desc: 'View all approved and rejected deposits' },
     { label: 'Pending Withdrawals', icon: ArrowUpCircle, to: '/pending-withdrawals', desc: 'Approve or reject withdrawal requests' },
     { label: 'Withdraw History', icon: History, to: '/withdraw-history', desc: 'View all processed withdrawals' },
+    { label: 'KYC Verifications', icon: FileCheck, to: '/verifications', desc: 'Review user identity documents' },
   ];
 
   return (

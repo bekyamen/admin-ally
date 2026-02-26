@@ -12,6 +12,7 @@ import PendingDepositsPage from "./pages/PendingDepositsPage";
 import DepositHistoryPage from "./pages/DepositHistoryPage";
 import PendingWithdrawalsPage from "./pages/PendingWithdrawalsPage";
 import WithdrawHistoryPage from "./pages/WithdrawHistoryPage";
+import VerificationsPage from "./pages/VerificationsPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ const App = () => {
             <Route path="/deposit-history" element={<ProtectedRoute><DepositHistoryPage /></ProtectedRoute>} />
             <Route path="/pending-withdrawals" element={<ProtectedRoute><PendingWithdrawalsPage /></ProtectedRoute>} />
             <Route path="/withdraw-history" element={<ProtectedRoute><WithdrawHistoryPage /></ProtectedRoute>} />
+            <Route path="/verifications" element={<ProtectedRoute><VerificationsPage /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
