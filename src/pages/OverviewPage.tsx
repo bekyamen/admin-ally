@@ -14,6 +14,7 @@ export default function OverviewPage() {
     { label: 'Pending Withdrawals', icon: ArrowUpCircle, to: '/pending-withdrawals', desc: 'Approve or reject withdrawal requests' },
     { label: 'Withdraw History', icon: History, to: '/withdraw-history', desc: 'View all processed withdrawals' },
     { label: 'KYC Verifications', icon: FileCheck, to: '/verifications', desc: 'Review user identity documents' },
+    { label: 'KYC History', icon: History, to: '/verification-history', desc: 'View all reviewed verifications' },
   ];
 
   return (

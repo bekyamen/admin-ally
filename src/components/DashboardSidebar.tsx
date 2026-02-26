@@ -13,6 +13,7 @@ const navItems = [
   { to: '/pending-withdrawals', icon: ArrowUpCircle, label: 'Pending Withdrawals' },
   { to: '/withdraw-history', icon: History, label: 'Withdraw History' },
   { to: '/verifications', icon: FileCheck, label: 'KYC Verifications' },
+  { to: '/verification-history', icon: History, label: 'KYC History' },
 ];
 
 export function DashboardSidebar() {
