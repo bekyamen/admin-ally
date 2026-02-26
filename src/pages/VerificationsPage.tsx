@@ -66,7 +66,7 @@ export default function VerificationsPage() {
   const fetchPending = async (page = 1) => {
     setLoading(true);
     try {
-      const data = await fetchWithAuth(`${API_BASE}/pending?page=${page}&limit=10`);
+      const data = await fetchWithAuth(`${API_BASE}/identity-verification/pending?page=${page}&limit=10`);
       setVerifications(data.data);
       setPagination(data.pagination);
     } catch (err: any) {
@@ -82,7 +82,7 @@ export default function VerificationsPage() {
     if (!reviewModal) return;
     setActionId(reviewModal.id);
     try {
-      await fetchWithAuth(`${API_BASE}/review/${reviewModal.id}`, {
+      await fetchWithAuth(`${API_BASE}/identity-verification/review/${reviewModal.id}`, {
         method: 'PATCH',
         body: JSON.stringify({ status: reviewModal.action, reviewNote: reviewNote || undefined }),
       });
