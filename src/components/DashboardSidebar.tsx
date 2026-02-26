@@ -1,6 +1,6 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {
-  Users, Wallet, ArrowDownCircle, ArrowUpCircle, LayoutDashboard, Shield, LogOut, History,
+  Users, Wallet, ArrowDownCircle, ArrowUpCircle, LayoutDashboard, Shield, LogOut, History, FileCheck,
 } from 'lucide-react';
 import { useAuthStore } from '@/store/authStore';
 
@@ -12,6 +12,7 @@ const navItems = [
   { to: '/deposit-history', icon: History, label: 'Deposit History' },
   { to: '/pending-withdrawals', icon: ArrowUpCircle, label: 'Pending Withdrawals' },
   { to: '/withdraw-history', icon: History, label: 'Withdraw History' },
+  { to: '/verifications', icon: FileCheck, label: 'KYC Verifications' },
 ];
 
 export function DashboardSidebar() {
