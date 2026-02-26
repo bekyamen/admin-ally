@@ -83,7 +83,7 @@ export default function VerificationsPage() {
     setActionId(reviewModal.id);
     try {
       await fetchWithAuth(`${API_BASE}/identity-verification/review/${reviewModal.id}`, {
-        method: 'PATCH',
+        method: 'POST',
         body: JSON.stringify({ status: reviewModal.action, reviewNote: reviewNote || undefined }),
       });
       toast.success(`Verification ${reviewModal.action.toLowerCase()}`);
