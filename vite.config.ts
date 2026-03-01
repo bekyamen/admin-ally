@@ -12,6 +12,11 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
+  preview: {
+    port: 3002, // your PM2 production port
+    host: true, // allow network access
+    allowedHosts: ["super-admin.bitorynfx.com"], // your domain
+  },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     alias: {
