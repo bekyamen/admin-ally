@@ -13,9 +13,11 @@ export default defineConfig(({ mode }) => ({
     },
   },
   preview: {
-    port: 3002, // your PM2 production port
+    port: 3002,
     host: true, // allow network access
     allowedHosts: ["super-admin.bitorynfx.com"], // your domain
+    strictPort: true, // Add this to ensure it uses exactly port 3002
+    cors: true, // Enable CORS
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
