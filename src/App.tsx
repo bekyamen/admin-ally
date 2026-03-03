@@ -14,6 +14,7 @@ import PendingWithdrawalsPage from "./pages/PendingWithdrawalsPage";
 import WithdrawHistoryPage from "./pages/WithdrawHistoryPage";
 import VerificationsPage from "./pages/VerificationsPage";
 import VerificationHistoryPage from "./pages/VerificationHistoryPage";
+import Level2HistoryPage from "./pages/Level2HistoryPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +38,7 @@ const App = () => {
             <Route path="/withdraw-history" element={<ProtectedRoute><WithdrawHistoryPage /></ProtectedRoute>} />
             <Route path="/verifications" element={<ProtectedRoute><VerificationsPage /></ProtectedRoute>} />
             <Route path="/verification-history" element={<ProtectedRoute><VerificationHistoryPage /></ProtectedRoute>} />
+            <Route path="/level2-history" element={<ProtectedRoute><Level2HistoryPage /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>

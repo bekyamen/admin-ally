@@ -14,6 +14,7 @@ const navItems = [
   { to: '/withdraw-history', icon: History, label: 'Withdraw History' },
   { to: '/verifications', icon: FileCheck, label: 'KYC Verifications' },
   { to: '/verification-history', icon: History, label: 'KYC History' },
+  { to: '/level2-history', icon: Shield, label: 'Level 2 History' },
 ];
 
 export function DashboardSidebar() {
