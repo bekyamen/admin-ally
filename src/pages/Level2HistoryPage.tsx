@@ -57,7 +57,7 @@ export default function Level2HistoryPage() {
   const fetchData = async (page = 1) => {
     setLoading(true);
     try {
-      const data = await fetchWithAuth(`${API_BASE}/level2/history?page=${page}&limit=10`);
+      const data = await fetchWithAuth(`${API_BASE}/identity-verification/level2/history?page=${page}&limit=10`);
       setRecords(data.data);
       setPagination(data.pagination);
     } catch (err: any) {
